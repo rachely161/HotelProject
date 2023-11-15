@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Security.Cryptography.Xml;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -8,44 +9,62 @@ namespace MyHotel.Controllers
     [ApiController]
     public class CostumerController : ControllerBase
     {
-        private static List<Costumer> costumers = new List<Costumer>();
+        DataContext dataContext;
+        public CostumerController(DataContext context)
+        {
+            dataContext= context;
+        }
         // GET: api/<CostumerController>
         [HttpGet]
         public IEnumerable<Costumer> Get()
         {
-            return costumers;
+            return dataContext.Costumers;
         }
 
         // GET api/<CostumerController>/5
         [HttpGet("{id}")]
-        public Costumer Get(string id)
+        public ActionResult<Costumer> Get(string id)
         {
-            Costumer c = costumers.Find(x => x.Id == id);
+            Costumer c = dataContext.Costumers.Find(x => x.Id == id);
+            if(c == null)
+                return NotFound();
             return c;
         }
 
         // POST api/<CostumerController>
         [HttpPost]
-        public void Post([FromBody] Costumer c)
+        public ActionResult Post([FromBody] Costumer c)
         {
-            costumers.Add(new Costumer { Id=c.Id, Phone=c.Phone,Address=c.Address,Name=c.Name });
+            if (c.Id.Length != 9)
+                return BadRequest();
+            Costumer c1 = dataContext.Costumers.Find(x => x.Id == c.Id);
+            if (c1 != null)
+                return BadRequest();
+            dataContext.Costumers.Add(new Costumer { Id=c.Id, Phone=c.Phone,Address=c.Address,Name=c.Name });
+            return Ok();
         }
 
         // PUT api/<CostumerController>/5
         [HttpPut("{id}")]
-        public void Put(string id, [FromBody] Costumer c)
+        public ActionResult Put(string id, [FromBody] Costumer c)
         {
-            Costumer c1 = costumers.Find(x => x.Id == id);
+            Costumer c1 = dataContext.Costumers.Find(x => x.Id == id);
+            if (c1 == null)
+                return NotFound();
             c1.Phone = c.Phone;
             c1.Address = c.Address;
+            return Ok();
         }
 
         // DELETE api/<CostumerController>/5
         [HttpDelete("{id}")]
-        public void Delete(string id)
+        public ActionResult Delete(string id)
         {
-            Costumer c = costumers.Find(x => x.Id == id);
-            costumers.Remove(c);
+            Costumer c = dataContext.Costumers.Find(x => x.Id == id);
+            if (c == null)
+                return NotFound();
+            dataContext.Costumers.Remove(c);
+            return Ok();    
         }
     }
 }
