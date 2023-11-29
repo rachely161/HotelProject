@@ -1,58 +1,61 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MyHotel.Core.Services;
+using MyHotel.Data;
 using System.Security.Cryptography.Xml;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace MyHotel.Controllers
+namespace MyHotel.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class CostumerController : ControllerBase
     {
-        DataContext dataContext;
-        public CostumerController(DataContext context)
+        private readonly ICustomerService _customerService;
+        public CostumerController(ICustomerService customerService)
         {
-            dataContext= context;
+            _customerService = customerService;
         }
+
         // GET: api/<CostumerController>
         [HttpGet]
-        public IEnumerable<Costumer> Get()
+        public ActionResult Get()
         {
-            return dataContext.Costumers;
+            return Ok(_customerService.GetAllCustomers());
         }
 
         // GET api/<CostumerController>/5
         [HttpGet("{id}")]
-        public ActionResult<Costumer> Get(string id)
+        public ActionResult<Customer> Get(string id)
         {
-            Costumer c = dataContext.Costumers.Find(x => x.Id == id);
-            if(c == null)
-                return NotFound();
-            return c;
+            //Customer c = dataContext.Costumers.Find(x => x.Id == id);
+            //if(c == null)
+            //    return NotFound();
+            //return c;
+            return Ok(_customerService.GetCustomerById(id));
         }
 
         // POST api/<CostumerController>
         [HttpPost]
-        public ActionResult Post([FromBody] Costumer c)
+        public ActionResult Post([FromBody] Customer c)
         {
             if (c.Id.Length != 9)
                 return BadRequest();
-            Costumer c1 = dataContext.Costumers.Find(x => x.Id == c.Id);
-            if (c1 != null)
-                return BadRequest();
-            dataContext.Costumers.Add(new Costumer { Id=c.Id, Phone=c.Phone,Address=c.Address,Name=c.Name });
+            //Customer c1 = dataContext.Costumers.Find(x => x.Id == c.Id);
+            //if (c1 != null)
+            //    return BadRequest();
+            _customerService.AddCustomer(c);    
             return Ok();
         }
 
         // PUT api/<CostumerController>/5
         [HttpPut("{id}")]
-        public ActionResult Put(string id, [FromBody] Costumer c)
+        public ActionResult Put(string id, [FromBody] Customer c)
         {
-            Costumer c1 = dataContext.Costumers.Find(x => x.Id == id);
-            if (c1 == null)
-                return NotFound();
-            c1.Phone = c.Phone;
-            c1.Address = c.Address;
+            //Customer c1 = dataContext.Costumers.Find(x => x.Id == id);
+            //if (c1 == null)
+            //    return NotFound();
+            _customerService.UpdateCustomer(id, c);
             return Ok();
         }
 
@@ -60,10 +63,10 @@ namespace MyHotel.Controllers
         [HttpDelete("{id}")]
         public ActionResult Delete(string id)
         {
-            Costumer c = dataContext.Costumers.Find(x => x.Id == id);
-            if (c == null)
-                return NotFound();
-            dataContext.Costumers.Remove(c);
+            //Customer c = dataContext.Costumers.Find(x => x.Id == id);
+            //if (c == null)
+            //    return NotFound();
+            _customerService.DeleteCustomer(id);
             return Ok();    
         }
     }

@@ -1,42 +1,46 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MyHotel.Core.Services;
+using MyHotel.Data;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace MyHotel.Controllers
+namespace MyHotel.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class RoomsController : ControllerBase
     {
-        DataContext dataContext;
-        public RoomsController(DataContext context)
+        private readonly IRoomService _roomService;
+        public RoomsController(IRoomService roomService)
         {
-            dataContext = context;
+            this._roomService = roomService;
         }
+
         // GET: api/<RoomsController>
         [HttpGet]
-        public IEnumerable<Room> Get()
+        public ActionResult Get()
         {
-            return dataContext.Rooms;
+            return Ok(_roomService.GetAllRooms());
         }
 
         // GET api/<RoomsController>/5
         [HttpGet("{id}")]
         public ActionResult<Room> Get(int id)
         {
-            Room r = dataContext.Rooms.Find(x => x.NumRoom == id);
-            if (r == null)
-                return NotFound();
-            return r;
+            //Room r = dataContext.Rooms.Find(x => x.NumRoom == id);
+            //if (r == null)
+            //    return NotFound();
+            //return r;
+            return Ok(_roomService.GetRoomById(id));
         }
 
         // POST api/<RoomsController>
         [HttpPost]
         public ActionResult Post([FromBody] Room r)
         {
-            if (r.Type != 'A' && r.Type != 'B' && r.Type != 'C' || r.Price <= 0||r.NumBeds<=0)
+            if (r.Type != 'A' && r.Type != 'B' && r.Type != 'C' || r.Price <= 0 || r.NumBeds <= 0)
                 return BadRequest();
-            dataContext.Rooms.Add(new Room { NumRoom = 100 * r.Floor + dataContext.RoomCount[r.Floor]++,NumBeds=r.NumBeds,Floor=r.Floor,Type=r.Type,Price=r.Price });
+            _roomService.AddRoom(r);
             return Ok();
         }
 
@@ -44,14 +48,12 @@ namespace MyHotel.Controllers
         [HttpPut("{id}")]
         public ActionResult Put(int id, [FromBody] Room r)
         {
-            Room r1 = dataContext.Rooms.Find(x => x.NumRoom == id);
-            if (r1 == null)
-                return NotFound();
+            //Room r1 = dataContext.Rooms.Find(x => x.NumRoom == id);
+            //if (r1 == null)
+            //    return NotFound();
             if (r.Type != 'A' && r.Type != 'B' && r.Type != 'C' || r.Price <= 0 || r.NumBeds <= 0)
                 return BadRequest();
-            r1.NumBeds = r.NumBeds;
-            r1.Type=r.Type;
-            r1.Price = r.Price;
+            _roomService.UpdateRoom(id, r);
             return Ok();
         }
 
@@ -59,10 +61,10 @@ namespace MyHotel.Controllers
         [HttpDelete("{id}")]
         public ActionResult Delete(int id)
         {
-            Room r = dataContext.Rooms.Find(x => x.NumRoom == id);
-            if (r == null)
-                return NotFound();
-            dataContext.Rooms.Remove(r); 
+            //Room r = dataContext.Rooms.Find(x => x.NumRoom == id);
+            //if (r == null)
+            //    return NotFound();
+            _roomService.DeleteRoom(id);
             return Ok();    
         }
     }
