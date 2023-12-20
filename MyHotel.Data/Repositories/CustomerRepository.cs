@@ -22,13 +22,13 @@ namespace MyHotel.Data.Repositories
 
         public void DeleteCustomer(string id)
         {
-            Customer c = _context.Costumers.Find(x => x.Id == id);
+            Customer c = _context.Costumers.ToList().Find(x => x.Id == id);
             _context.Costumers.Remove(c);
         }
 
         public List<Customer> GetAllCustomers()
         {
-            return _context.Costumers;
+            return _context.Costumers.ToList();
         }
 
         public Customer GetCustomerById(string id)
@@ -38,7 +38,7 @@ namespace MyHotel.Data.Repositories
 
         public void UpdateCustomer(string id, Customer customer)
         {
-            Customer c1 = _context.Costumers.Find(x => x.Id == id);
+            Customer c1 = _context.Costumers.ToList().Find(x => x.Id == id);
             c1.Phone = customer.Phone;
             c1.Address = customer.Address;
         }

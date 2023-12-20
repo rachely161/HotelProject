@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Entities\Invite.cs~RF1270c97.TMP" />
+  </ItemGroup>
+
 </Project>
