@@ -22,20 +22,37 @@ namespace MyHotel.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("InviteRoom", b =>
+                {
+                    b.Property<int>("InvitesId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RoomsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("InvitesId", "RoomsId");
+
+                    b.HasIndex("RoomsId");
+
+                    b.ToTable("InviteRoom");
+                });
+
             modelBuilder.Entity("MyHotel.Customer", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("Address")
-                        .HasColumnType("int");
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Phone")
-                        .HasColumnType("int");
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -50,13 +67,11 @@ namespace MyHotel.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("IdCostumer")
-                        .HasColumnType("int");
+                    b.Property<string>("CustomerId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("NumDays")
-                        .HasColumnType("int");
-
-                    b.Property<int>("NumRoom")
                         .HasColumnType("int");
 
                     b.Property<int>("Payment")
@@ -66,6 +81,8 @@ namespace MyHotel.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
 
                     b.ToTable("Invites");
                 });
@@ -94,6 +111,37 @@ namespace MyHotel.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Rooms");
+                });
+
+            modelBuilder.Entity("InviteRoom", b =>
+                {
+                    b.HasOne("MyHotel.Invite", null)
+                        .WithMany()
+                        .HasForeignKey("InvitesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MyHotel.Room", null)
+                        .WithMany()
+                        .HasForeignKey("RoomsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("MyHotel.Invite", b =>
+                {
+                    b.HasOne("MyHotel.Customer", "Customer")
+                        .WithMany("Invites")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+                });
+
+            modelBuilder.Entity("MyHotel.Customer", b =>
+                {
+                    b.Navigation("Invites");
                 });
 #pragma warning restore 612, 618
         }

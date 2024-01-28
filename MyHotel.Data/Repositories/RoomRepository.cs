@@ -17,13 +17,15 @@ namespace MyHotel.Data.Repositories
 
         public void AddRoom(Room room)
         {
-            _context.Rooms.Add(new Room { Id = 100 * room.Floor + _context.RoomCount[room.Floor]++, NumBeds = room.NumBeds, Floor = room.Floor, Type = room.Type, Price = room.Price });
+            _context.Rooms.Add(room);
+            _context.SaveChanges();
         }
 
         public void DeleteRoom(int id)
         {
-            Room r = _context.Rooms.ToList().Find(x => x.Id == id);
+            Room r = GetRoomById(id);
             _context.Rooms.Remove(r);
+            _context.SaveChanges();
         }
 
         public List<Room> GetAllRooms()
@@ -33,15 +35,16 @@ namespace MyHotel.Data.Repositories
 
         public Room GetRoomById(int id)
         {
-            return _context.Rooms.First(r => r.Id == id);
+            return _context.Rooms.Find(id);
         }
 
         public void UpdateRoom(int id, Room room)
         {
-            Room r1 = _context.Rooms.ToList().Find(x => x.Id == id);
+            Room r1 = GetRoomById(id);
             r1.NumBeds = room.NumBeds;
             r1.Type = room.Type;
             r1.Price = room.Price;
+            _context.SaveChanges();
         }
     }
 }

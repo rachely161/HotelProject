@@ -7,5 +7,7 @@
         public int Floor { get; set; }
         public int Price { get; set; }
         public char Type { get; set; }
+
+        public List<Invite> Invites { get; set; }
     }
 }

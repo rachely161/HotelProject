@@ -38,8 +38,8 @@ namespace MyHotel.Api.Controllers
         [HttpPost]
         public ActionResult Post([FromBody] Room r)
         {
-            if (r.Type != 'A' && r.Type != 'B' && r.Type != 'C' || r.Price <= 0 || r.NumBeds <= 0)
-                return BadRequest();
+            //if (r.Type != 'A' && r.Type != 'B' && r.Type != 'C' || r.Price <= 0 || r.NumBeds <= 0)
+            //    return BadRequest();
             _roomService.AddRoom(r);
             return Ok();
         }
@@ -51,8 +51,8 @@ namespace MyHotel.Api.Controllers
             //Room r1 = dataContext.Rooms.Find(x => x.NumRoom == id);
             //if (r1 == null)
             //    return NotFound();
-            if (r.Type != 'A' && r.Type != 'B' && r.Type != 'C' || r.Price <= 0 || r.NumBeds <= 0)
-                return BadRequest();
+            //if (r.Type != 'A' && r.Type != 'B' && r.Type != 'C' || r.Price <= 0 || r.NumBeds <= 0)
+            //    return BadRequest();
             _roomService.UpdateRoom(id, r);
             return Ok();
         }

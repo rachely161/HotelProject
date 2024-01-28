@@ -17,13 +17,15 @@ namespace MyHotel.Data.Repositories
 
         public void AddCustomer(Customer customer)
         {
-            _context.Costumers.Add(new Customer { Id = customer.Id, Phone = customer.Phone, Address = customer.Address, Name = customer.Name });
+            _context.Costumers.Add(customer);
+            _context.SaveChanges();
         }
 
         public void DeleteCustomer(string id)
         {
-            Customer c = _context.Costumers.ToList().Find(x => x.Id == id);
+            Customer c = GetCustomerById(id);
             _context.Costumers.Remove(c);
+            _context.SaveChanges();
         }
 
         public List<Customer> GetAllCustomers()
@@ -33,14 +35,17 @@ namespace MyHotel.Data.Repositories
 
         public Customer GetCustomerById(string id)
         {
-            return _context.Costumers.First(c => c.Id==id);
+            return _context.Costumers.Find(id);
         }
 
         public void UpdateCustomer(string id, Customer customer)
         {
-            Customer c1 = _context.Costumers.ToList().Find(x => x.Id == id);
+            Customer c1 = GetCustomerById(id);
             c1.Phone = customer.Phone;
             c1.Address = customer.Address;
+            c1.Name = customer.Name;
+            _context.SaveChanges();
+
         }
     }
 }

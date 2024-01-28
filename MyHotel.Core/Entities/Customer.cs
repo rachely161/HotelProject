@@ -4,7 +4,9 @@
     {
         public string Id { get; set; }
         public string Name { get; set; }    
-        public int Phone { get; set; }
-        public int Address { get; set; }
+        public string Phone { get; set; }
+        public string Address { get; set; }
+
+        public List<Invite> Invites { get; set; }
     }
 }

@@ -17,13 +17,15 @@ namespace MyHotel.Data.Repositories
 
         public void AddInvite(Invite invite)
         {
-            _context.Invites.Add(new Invite {Id = _context.CountInvites++, NumRoom = invite.NumRoom, Start = invite.Start, NumDays = invite.NumDays, IdCostumer = invite.IdCostumer, Payment = invite.Payment });
+            _context.Invites.Add(invite);
+            _context.SaveChanges();
         }
 
         public void DeleteInvite(int id)
         {
-            Invite i = _context.Invites.ToList().Find(x => x.Id == id);
+            Invite i = GetInviteById(id);
             _context.Invites.Remove(i);
+            _context.SaveChanges();
         }
 
         public List<Invite> GetAllInvites()
@@ -33,16 +35,17 @@ namespace MyHotel.Data.Repositories
 
         public Invite GetInviteById(int id)
         {
-            return _context.Invites.First(i=>i.Id==id);
+            return _context.Invites.Find(id);
         }
 
         public void UpdateInvite(int id, Invite invite)
         {
-            Invite i1 = _context.Invites.ToList().Find(x => x.Id == id);
-            i1.NumRoom = invite.NumRoom;
+            Invite i1 = GetInviteById(id);
+            //i1.RoomId = invite.RoomId;
             i1.Start = invite.Start;
             i1.NumDays = invite.NumDays;
             i1.Payment = invite.Payment;
+            _context.SaveChanges();
         }
     }
 }

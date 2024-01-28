@@ -9,10 +9,10 @@ namespace MyHotel.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CostumerController : ControllerBase
+    public class CustomersController : ControllerBase
     {
         private readonly ICustomerService _customerService;
-        public CostumerController(ICustomerService customerService)
+        public CustomersController(ICustomerService customerService)
         {
             _customerService = customerService;
         }

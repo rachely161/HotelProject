@@ -15,10 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\MyHotel.Core\MyHotel.Core.csproj" />
     <ProjectReference Include="..\MyHotel.Data\MyHotel.Data.csproj" />
     <ProjectReference Include="..\MyHotel.Service\MyHotel.Service.csproj" />
