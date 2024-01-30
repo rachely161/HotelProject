@@ -11,7 +11,7 @@ namespace MyHotel.Data
         public int[] RoomCount { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=RacheliElshteinHotel");
+            optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=RacheliElshteinHotelProject");
         }
 
         //public DataContext()

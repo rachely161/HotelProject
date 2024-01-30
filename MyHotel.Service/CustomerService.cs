@@ -11,9 +11,9 @@ namespace MyHotel.Service
             _customerRepository=customerRepository;
         }
     
-        public void AddCustomer(Customer customer)
+        public Customer AddCustomer(Customer customer)
         {
-            _customerRepository.AddCustomer(customer); 
+            return _customerRepository.AddCustomer(customer); 
         }
 
         public void DeleteCustomer(string id)

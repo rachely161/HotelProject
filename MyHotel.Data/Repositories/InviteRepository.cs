@@ -15,10 +15,11 @@ namespace MyHotel.Data.Repositories
             _context = context;
         }
 
-        public void AddInvite(Invite invite)
+        public Invite AddInvite(Invite invite)
         {
             _context.Invites.Add(invite);
             _context.SaveChanges();
+            return invite;
         }
 
         public void DeleteInvite(int id)

@@ -11,7 +11,7 @@ namespace MyHotel.Core.Services
         public List<Room> GetAllRooms();
         public Room GetRoomById(int id);
         public void DeleteRoom(int id);
-        public void AddRoom(Room room);
+        public Room AddRoom(Room room);
         public void UpdateRoom(int id, Room room);
     }
 }

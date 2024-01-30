@@ -16,9 +16,9 @@ namespace MyHotel.Service
             _roomRepository = roomRepository;
         }
     
-        public void AddRoom(Room room)
+        public Room AddRoom(Room room)
         {
-            _roomRepository.AddRoom(room);
+            return _roomRepository.AddRoom(room);
         }
 
         public void DeleteRoom(int id)

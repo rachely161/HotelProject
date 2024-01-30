@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using MyHotel.Api.models;
+using MyHotel.Core.DTOs;
 using MyHotel.Core.Services;
 using MyHotel.Data;
 
@@ -10,9 +13,12 @@ namespace MyHotel.Api.Controllers
     [ApiController]
     public class InvitesController : ControllerBase
     {
+        private readonly IMapper _mapper;
+
         private readonly IInviteService _inviteService;
-        public InvitesController(IInviteService inviteService)
+        public InvitesController(IInviteService inviteService,IMapper mapper)
         {
+            _mapper = mapper;
             _inviteService = inviteService;
         }
 
@@ -25,22 +31,25 @@ namespace MyHotel.Api.Controllers
 
         // GET api/<InvitesController>/5
         [HttpGet("{id}")]
-        public ActionResult<Invite> Get(int id)
+        public ActionResult<InviteDto> Get(int id)
         {
             //Invite invite = dataContext.Invites.Find(x=>x.CodeInvite==id);
             //if (invite == null)
             //    return NotFound();
-            return Ok(_inviteService.GetInviteById(id));
+            return Ok(_mapper.Map<InviteDto>( _inviteService.GetInviteById(id)));
         }
 
         // POST api/<InvitesController>
         [HttpPost]
-        public ActionResult Post([FromBody] Invite i)
+        public ActionResult Post([FromBody] InvitePostModel i)
         {
             //if(dataContext.Rooms.Find(x=>x.NumRoom==i.NumRoom)==null||i.NumDays<=0)
             //    return BadRequest();  
-            _inviteService.AddInvite(i);
-            return Ok(); 
+
+            var inviteToAdd = new Invite { Start=i.Start,NumDays=i.NumDays,Payment=i.Payment,CustomerId=i.CustomerId,RoomId=i.RoomId};
+            var newInvite=_inviteService.AddInvite(inviteToAdd);
+            var inviteDto = _mapper.Map<InviteDto>(newInvite);
+            return Ok(inviteDto); 
         }
 
         // PUT api/<InvitesController>/5

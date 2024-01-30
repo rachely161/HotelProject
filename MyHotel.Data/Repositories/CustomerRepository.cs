@@ -15,10 +15,11 @@ namespace MyHotel.Data.Repositories
             _context = context;
         }
 
-        public void AddCustomer(Customer customer)
+        public Customer AddCustomer(Customer customer)
         {
             _context.Costumers.Add(customer);
             _context.SaveChanges();
+            return customer;
         }
 
         public void DeleteCustomer(string id)

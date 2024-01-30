@@ -10,7 +10,7 @@ namespace MyHotel.Core.Repositories
     {
         List<Customer> GetAllCustomers(); 
         Customer GetCustomerById(string id);   
-        void AddCustomer(Customer customer);
+        Customer AddCustomer(Customer customer);
         void UpdateCustomer(string id, Customer customer); 
         void DeleteCustomer(string id);    
 

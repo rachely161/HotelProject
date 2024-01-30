@@ -12,8 +12,8 @@ using MyHotel.Data;
 namespace MyHotel.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240103085354_buildDBAndAddConnections")]
-    partial class buildDBAndAddConnections
+    [Migration("20240130110624_buildDataBase")]
+    partial class buildDataBase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -24,25 +24,13 @@ namespace MyHotel.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("InviteRoom", b =>
-                {
-                    b.Property<int>("InvitesId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RoomsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("InvitesId", "RoomsId");
-
-                    b.HasIndex("RoomsId");
-
-                    b.ToTable("InviteRoom");
-                });
-
             modelBuilder.Entity("MyHotel.Customer", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Address")
                         .IsRequired()
@@ -53,6 +41,10 @@ namespace MyHotel.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Tz")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -71,7 +63,10 @@ namespace MyHotel.Data.Migrations
 
                     b.Property<string>("CustomerId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("CustomerId1")
+                        .HasColumnType("int");
 
                     b.Property<int>("NumDays")
                         .HasColumnType("int");
@@ -79,12 +74,17 @@ namespace MyHotel.Data.Migrations
                     b.Property<int>("Payment")
                         .HasColumnType("int");
 
+                    b.Property<int>("RoomId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("Start")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CustomerId");
+                    b.HasIndex("CustomerId1");
+
+                    b.HasIndex("RoomId");
 
                     b.ToTable("Invites");
                 });
@@ -115,33 +115,31 @@ namespace MyHotel.Data.Migrations
                     b.ToTable("Rooms");
                 });
 
-            modelBuilder.Entity("InviteRoom", b =>
-                {
-                    b.HasOne("MyHotel.Invite", null)
-                        .WithMany()
-                        .HasForeignKey("InvitesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("MyHotel.Room", null)
-                        .WithMany()
-                        .HasForeignKey("RoomsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("MyHotel.Invite", b =>
                 {
                     b.HasOne("MyHotel.Customer", "Customer")
                         .WithMany("Invites")
-                        .HasForeignKey("CustomerId")
+                        .HasForeignKey("CustomerId1")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MyHotel.Room", "Room")
+                        .WithMany("Invites")
+                        .HasForeignKey("RoomId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Customer");
+
+                    b.Navigation("Room");
                 });
 
             modelBuilder.Entity("MyHotel.Customer", b =>
+                {
+                    b.Navigation("Invites");
+                });
+
+            modelBuilder.Entity("MyHotel.Room", b =>
                 {
                     b.Navigation("Invites");
                 });

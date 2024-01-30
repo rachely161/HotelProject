@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using MyHotel.Api.models;
+using MyHotel.Core.DTOs;
 using MyHotel.Core.Services;
 using MyHotel.Data;
 
@@ -10,38 +13,43 @@ namespace MyHotel.Api.Controllers
     [ApiController]
     public class RoomsController : ControllerBase
     {
+        private readonly IMapper _mapper;
         private readonly IRoomService _roomService;
-        public RoomsController(IRoomService roomService)
+        public RoomsController(IRoomService roomService,IMapper mapper)
         {
             this._roomService = roomService;
+            _mapper = mapper;
         }
 
         // GET: api/<RoomsController>
         [HttpGet]
         public ActionResult Get()
         {
+
             return Ok(_roomService.GetAllRooms());
         }
 
         // GET api/<RoomsController>/5
         [HttpGet("{id}")]
-        public ActionResult<Room> Get(int id)
+        public ActionResult<RoomDto> Get(int id)
         {
             //Room r = dataContext.Rooms.Find(x => x.NumRoom == id);
             //if (r == null)
             //    return NotFound();
             //return r;
-            return Ok(_roomService.GetRoomById(id));
+            return Ok(_mapper.Map<RoomDto>( _roomService.GetRoomById(id)));
         }
 
         // POST api/<RoomsController>
         [HttpPost]
-        public ActionResult Post([FromBody] Room r)
+        public ActionResult Post([FromBody] RoomPostModel r)
         {
             //if (r.Type != 'A' && r.Type != 'B' && r.Type != 'C' || r.Price <= 0 || r.NumBeds <= 0)
             //    return BadRequest();
-            _roomService.AddRoom(r);
-            return Ok();
+            var roomToAdd=new Room { Floor = r.Floor,NumBeds=r.NumBeds,Price=r.Price,Type=r.Type};
+            var newRoom=_roomService.AddRoom(roomToAdd);
+            var roomDto = _mapper.Map<RoomDto>(newRoom);
+            return Ok(roomDto);
         }
 
         // PUT api/<RoomsController>/5

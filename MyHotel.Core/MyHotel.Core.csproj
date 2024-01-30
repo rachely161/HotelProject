@@ -10,4 +10,8 @@
     <None Remove="Entities\Invite.cs~RF1270c97.TMP" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="12.0.1" />
+  </ItemGroup>
+
 </Project>

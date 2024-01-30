@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using MyHotel.Api.models;
+using MyHotel.Core.DTOs;
 using MyHotel.Core.Services;
 using MyHotel.Data;
 using System.Security.Cryptography.Xml;
@@ -12,9 +15,13 @@ namespace MyHotel.Api.Controllers
     public class CustomersController : ControllerBase
     {
         private readonly ICustomerService _customerService;
-        public CustomersController(ICustomerService customerService)
+
+        private readonly IMapper _mapper;
+
+        public CustomersController(ICustomerService customerService,IMapper mapper)
         {
             _customerService = customerService;
+            _mapper = mapper;
         }
 
         // GET: api/<CostumerController>
@@ -26,29 +33,35 @@ namespace MyHotel.Api.Controllers
 
         // GET api/<CostumerController>/5
         [HttpGet("{id}")]
-        public ActionResult<Customer> Get(string id)
+        public ActionResult<CustomerDto> Get(string id)
         {
             //Customer c = dataContext.Costumers.Find(x => x.Id == id);
             //if(c == null)
             //    return NotFound();
             //return c;
-            return Ok(_customerService.GetCustomerById(id));
+            return Ok(_mapper.Map<CustomerDto>( _customerService.GetCustomerById(id)));
         }
 
         // POST api/<CostumerController>
         [HttpPost]
-        public ActionResult Post([FromBody] Customer c)
+        public ActionResult Post([FromBody] CustomerPostModel c)
         {
-            if (c.Id.Length != 9)
-                return BadRequest();
+            //if (c.Tz.Length != 9)
+            //    return BadRequest();
             //Customer c1 = dataContext.Costumers.Find(x => x.Id == c.Id);
             //if (c1 != null)
             //    return BadRequest();
-            _customerService.AddCustomer(c);    
-            return Ok();
+            var customerToAdd = new Customer { Tz = c.Tz,Name=c.Name,Phone=c.Phone,Address=c.Address };
+            var newCustomer = _customerService.AddCustomer(customerToAdd);
+            var customerDto = _mapper.Map<CustomerDto>(newCustomer);  
+            return Ok(customerDto);
         }
 
-        // PUT api/<CostumerController>/5
+        // PUT api/<CostumerController>/
+        // 
+
+
+
         [HttpPut("{id}")]
         public ActionResult Put(string id, [FromBody] Customer c)
         {

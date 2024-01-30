@@ -15,9 +15,9 @@ namespace MyHotel.Service
         {
             _inviteRepository = inviteRepository;
         }
-        public void AddInvite(Invite invite)
+        public Invite AddInvite(Invite invite)
         {
-            _inviteRepository.AddInvite(invite);
+            return _inviteRepository.AddInvite(invite);
         }
 
         public void DeleteInvite(int id)

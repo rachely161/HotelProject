@@ -11,7 +11,7 @@ namespace MyHotel.Core.Repositories
         public List<Invite> GetAllInvites();
         public Invite GetInviteById(int id);   
         public void DeleteInvite(int id);
-        public void AddInvite(Invite invite);   
+        public Invite AddInvite(Invite invite);   
         public void UpdateInvite(int id, Invite invite);    
     }
 }
