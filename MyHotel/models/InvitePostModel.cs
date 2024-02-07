@@ -6,6 +6,6 @@
         public int NumDays { get; set; }
         public int Payment { get; set; }
         public int CustomerId { get; set; }
-        public int RoomId { get; set; }
+        public List<int> RoomIds { get; set; }
     }
 }

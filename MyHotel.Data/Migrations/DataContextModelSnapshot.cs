@@ -22,6 +22,21 @@ namespace MyHotel.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("InviteRoom", b =>
+                {
+                    b.Property<int>("InvitesId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RoomsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("InvitesId", "RoomsId");
+
+                    b.HasIndex("RoomsId");
+
+                    b.ToTable("InviteRoom");
+                });
+
             modelBuilder.Entity("MyHotel.Customer", b =>
                 {
                     b.Property<int>("Id")
@@ -68,17 +83,12 @@ namespace MyHotel.Data.Migrations
                     b.Property<int>("Payment")
                         .HasColumnType("int");
 
-                    b.Property<int>("RoomId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("Start")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CustomerId");
-
-                    b.HasIndex("RoomId");
 
                     b.ToTable("Invites");
                 });
@@ -109,6 +119,21 @@ namespace MyHotel.Data.Migrations
                     b.ToTable("Rooms");
                 });
 
+            modelBuilder.Entity("InviteRoom", b =>
+                {
+                    b.HasOne("MyHotel.Invite", null)
+                        .WithMany()
+                        .HasForeignKey("InvitesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MyHotel.Room", null)
+                        .WithMany()
+                        .HasForeignKey("RoomsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("MyHotel.Invite", b =>
                 {
                     b.HasOne("MyHotel.Customer", "Customer")
@@ -117,23 +142,10 @@ namespace MyHotel.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MyHotel.Room", "Room")
-                        .WithMany("Invites")
-                        .HasForeignKey("RoomId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Customer");
-
-                    b.Navigation("Room");
                 });
 
             modelBuilder.Entity("MyHotel.Customer", b =>
-                {
-                    b.Navigation("Invites");
-                });
-
-            modelBuilder.Entity("MyHotel.Room", b =>
                 {
                     b.Navigation("Invites");
                 });

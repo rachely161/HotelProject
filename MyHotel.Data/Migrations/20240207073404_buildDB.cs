@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace MyHotel.Data.Migrations
 {
-    public partial class buildDataBase : Migration
+    public partial class buildDB : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -50,48 +50,67 @@ namespace MyHotel.Data.Migrations
                     Start = table.Column<DateTime>(type: "datetime2", nullable: false),
                     NumDays = table.Column<int>(type: "int", nullable: false),
                     Payment = table.Column<int>(type: "int", nullable: false),
-                    CustomerId = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CustomerId1 = table.Column<int>(type: "int", nullable: false),
-                    RoomId = table.Column<int>(type: "int", nullable: false)
+                    CustomerId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Invites", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Invites_Costumers_CustomerId1",
-                        column: x => x.CustomerId1,
+                        name: "FK_Invites_Costumers_CustomerId",
+                        column: x => x.CustomerId,
                         principalTable: "Costumers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "InviteRoom",
+                columns: table => new
+                {
+                    InvitesId = table.Column<int>(type: "int", nullable: false),
+                    RoomsId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_InviteRoom", x => new { x.InvitesId, x.RoomsId });
                     table.ForeignKey(
-                        name: "FK_Invites_Rooms_RoomId",
-                        column: x => x.RoomId,
+                        name: "FK_InviteRoom_Invites_InvitesId",
+                        column: x => x.InvitesId,
+                        principalTable: "Invites",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_InviteRoom_Rooms_RoomsId",
+                        column: x => x.RoomsId,
                         principalTable: "Rooms",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Invites_CustomerId1",
-                table: "Invites",
-                column: "CustomerId1");
+                name: "IX_InviteRoom_RoomsId",
+                table: "InviteRoom",
+                column: "RoomsId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Invites_RoomId",
+                name: "IX_Invites_CustomerId",
                 table: "Invites",
-                column: "RoomId");
+                column: "CustomerId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "InviteRoom");
+
+            migrationBuilder.DropTable(
                 name: "Invites");
 
             migrationBuilder.DropTable(
-                name: "Costumers");
+                name: "Rooms");
 
             migrationBuilder.DropTable(
-                name: "Rooms");
+                name: "Costumers");
         }
     }
 }

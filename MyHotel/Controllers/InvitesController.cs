@@ -13,13 +13,17 @@ namespace MyHotel.Api.Controllers
     [ApiController]
     public class InvitesController : ControllerBase
     {
+        
         private readonly IMapper _mapper;
 
         private readonly IInviteService _inviteService;
-        public InvitesController(IInviteService inviteService,IMapper mapper)
+
+        private readonly IRoomService _roomService;
+        public InvitesController(IInviteService inviteService,IMapper mapper,IRoomService roomService)
         {
             _mapper = mapper;
             _inviteService = inviteService;
+            _roomService = roomService;
         }
 
         // GET: api/<InvitesController>
@@ -46,10 +50,11 @@ namespace MyHotel.Api.Controllers
             //if(dataContext.Rooms.Find(x=>x.NumRoom==i.NumRoom)==null||i.NumDays<=0)
             //    return BadRequest();  
 
-            var inviteToAdd = new Invite { Start=i.Start,NumDays=i.NumDays,Payment=i.Payment,CustomerId=i.CustomerId,RoomId=i.RoomId};
-            var newInvite=_inviteService.AddInvite(inviteToAdd);
+            var rooms = i.RoomIds.Select(r => _roomService.GetRoomById(r)).ToList();
+            var inviteToAdd = new Invite { Start = i.Start, NumDays = i.NumDays, Payment = i.Payment, CustomerId = i.CustomerId, Rooms = rooms };
+            var newInvite = _inviteService.AddInvite(inviteToAdd);
             var inviteDto = _mapper.Map<InviteDto>(newInvite);
-            return Ok(inviteDto); 
+            return Ok(inviteDto);
         }
 
         // PUT api/<InvitesController>/5

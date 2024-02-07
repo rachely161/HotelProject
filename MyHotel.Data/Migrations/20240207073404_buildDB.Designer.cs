@@ -12,8 +12,8 @@ using MyHotel.Data;
 namespace MyHotel.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240130110624_buildDataBase")]
-    partial class buildDataBase
+    [Migration("20240207073404_buildDB")]
+    partial class buildDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,6 +23,21 @@ namespace MyHotel.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+
+            modelBuilder.Entity("InviteRoom", b =>
+                {
+                    b.Property<int>("InvitesId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RoomsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("InvitesId", "RoomsId");
+
+                    b.HasIndex("RoomsId");
+
+                    b.ToTable("InviteRoom");
+                });
 
             modelBuilder.Entity("MyHotel.Customer", b =>
                 {
@@ -61,11 +76,7 @@ namespace MyHotel.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("CustomerId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("CustomerId1")
+                    b.Property<int>("CustomerId")
                         .HasColumnType("int");
 
                     b.Property<int>("NumDays")
@@ -74,17 +85,12 @@ namespace MyHotel.Data.Migrations
                     b.Property<int>("Payment")
                         .HasColumnType("int");
 
-                    b.Property<int>("RoomId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("Start")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CustomerId1");
-
-                    b.HasIndex("RoomId");
+                    b.HasIndex("CustomerId");
 
                     b.ToTable("Invites");
                 });
@@ -115,31 +121,33 @@ namespace MyHotel.Data.Migrations
                     b.ToTable("Rooms");
                 });
 
+            modelBuilder.Entity("InviteRoom", b =>
+                {
+                    b.HasOne("MyHotel.Invite", null)
+                        .WithMany()
+                        .HasForeignKey("InvitesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MyHotel.Room", null)
+                        .WithMany()
+                        .HasForeignKey("RoomsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("MyHotel.Invite", b =>
                 {
                     b.HasOne("MyHotel.Customer", "Customer")
                         .WithMany("Invites")
-                        .HasForeignKey("CustomerId1")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("MyHotel.Room", "Room")
-                        .WithMany("Invites")
-                        .HasForeignKey("RoomId")
+                        .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Customer");
-
-                    b.Navigation("Room");
                 });
 
             modelBuilder.Entity("MyHotel.Customer", b =>
-                {
-                    b.Navigation("Invites");
-                });
-
-            modelBuilder.Entity("MyHotel.Room", b =>
                 {
                     b.Navigation("Invites");
                 });

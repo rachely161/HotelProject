@@ -1,4 +1,5 @@
 using MyHotel;
+using MyHotel.Core;
 using MyHotel.Core.Repositories;
 using MyHotel.Core.Services;
 using MyHotel.Data;
@@ -18,7 +19,7 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
+builder.Services.AddAutoMapper(typeof(MappingProfile));
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddScoped<IRoomRepository, RoomRepository>();
