@@ -1,4 +1,5 @@
-﻿using MyHotel.Core.Repositories;
+﻿using Microsoft.EntityFrameworkCore;
+using MyHotel.Core.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,37 +16,38 @@ namespace MyHotel.Data.Repositories
             _context = context;
         }
 
-        public Customer AddCustomer(Customer customer)
+        public async Task<Customer> AddCustomerAsync(Customer customer)
         {
             _context.Costumers.Add(customer);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return customer;
         }
 
-        public void DeleteCustomer(string id)
+        public async Task DeleteCustomerAsync(int id)
         {
-            Customer c = GetCustomerById(id);
+            Customer c = await GetCustomerByIdAsync(id);
             _context.Costumers.Remove(c);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public List<Customer> GetAllCustomers()
+        public async Task<List<Customer>> GetAllCustomersAsync()
         {
-            return _context.Costumers.ToList();
+            return await _context.Costumers.ToListAsync();
         }
 
-        public Customer GetCustomerById(string id)
+        public async Task<Customer> GetCustomerByIdAsync(int id)
         {
-            return _context.Costumers.Find(id);
+            return await _context.Costumers.FindAsync(id);
         }
 
-        public void UpdateCustomer(string id, Customer customer)
+        public async Task<Customer> UpdateCustomerAsync(int id, Customer customer)
         {
-            Customer c1 = GetCustomerById(id);
+            Customer c1 = await GetCustomerByIdAsync(id);
             c1.Phone = customer.Phone;
             c1.Address = customer.Address;
             c1.Name = customer.Name;
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
+            return c1;
 
         }
     }

@@ -15,37 +15,37 @@ namespace MyHotel.Data.Repositories
             _context = context;
         }
 
-        public Room AddRoom(Room room)
+        public async Task<Room> AddRoomAsync(Room room)
         {
             _context.Rooms.Add(room);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return room;
         }
 
-        public void DeleteRoom(int id)
+        public async Task DeleteRoomAsync(int id)
         {
-            Room r = GetRoomById(id);
+            Room r =await GetRoomByIdAsync(id);
             _context.Rooms.Remove(r);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public List<Room> GetAllRooms()
+        public async Task<List<Room>> GetAllRoomsAsync()
         {
-            return _context.Rooms.ToList();
+            return await _context.Rooms.ToListAsync();
         }
 
-        public Room GetRoomById(int id)
+        public Task<Room> GetRoomByIdAsync(int id)
         {
-            return _context.Rooms.Find(id);
+            return _context.Rooms.FindAsync(id);
         }
 
-        public void UpdateRoom(int id, Room room)
+        public async Task UpdateRoomAsync(int id, Room room)
         {
-            Room r1 = GetRoomById(id);
+            Room r1 =await GetRoomByIdAsync(id);
             r1.NumBeds = room.NumBeds;
             r1.Type = room.Type;
             r1.Price = room.Price;
-            _context.SaveChanges();
+            _context.SaveChangesAsync();
         }
     }
 }

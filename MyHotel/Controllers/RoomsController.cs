@@ -17,62 +17,62 @@ namespace MyHotel.Api.Controllers
         private readonly IRoomService _roomService;
         public RoomsController(IRoomService roomService,IMapper mapper)
         {
-            this._roomService = roomService;
+            _roomService = roomService;
             _mapper = mapper;
         }
 
         // GET: api/<RoomsController>
         [HttpGet]
-        public ActionResult Get()
+        public async Task<ActionResult> Get()
         {
 
-            return Ok(_roomService.GetAllRooms());
+            return Ok(await _roomService.GetAllRoomsAsync());
         }
 
         // GET api/<RoomsController>/5
         [HttpGet("{id}")]
-        public ActionResult<RoomDto> Get(int id)
+        public async Task<ActionResult<RoomDto>> Get(int id)
         {
             //Room r = dataContext.Rooms.Find(x => x.NumRoom == id);
             //if (r == null)
             //    return NotFound();
             //return r;
-            return Ok(_mapper.Map<RoomDto>( _roomService.GetRoomById(id)));
+            return Ok(_mapper.Map<RoomDto>(await _roomService.GetRoomByIdAsync(id)));
         }
 
         // POST api/<RoomsController>
         [HttpPost]
-        public ActionResult Post([FromBody] RoomPostModel r)
+        public async Task<ActionResult> Post([FromBody] RoomPostModel r)
         {
             //if (r.Type != 'A' && r.Type != 'B' && r.Type != 'C' || r.Price <= 0 || r.NumBeds <= 0)
             //    return BadRequest();
             var roomToAdd=new Room { Floor = r.Floor,NumBeds=r.NumBeds,Price=r.Price,Type=r.Type};
-            var newRoom=_roomService.AddRoom(roomToAdd);
+            var newRoom=await _roomService.AddRoomAsync(roomToAdd);
             var roomDto = _mapper.Map<RoomDto>(newRoom);
             return Ok(roomDto);
         }
 
         // PUT api/<RoomsController>/5
         [HttpPut("{id}")]
-        public ActionResult Put(int id, [FromBody] Room r)
+        public async Task<ActionResult> Put(int id, [FromBody] Room r)
         {
             //Room r1 = dataContext.Rooms.Find(x => x.NumRoom == id);
             //if (r1 == null)
             //    return NotFound();
             //if (r.Type != 'A' && r.Type != 'B' && r.Type != 'C' || r.Price <= 0 || r.NumBeds <= 0)
             //    return BadRequest();
-            _roomService.UpdateRoom(id, r);
+            await _roomService.UpdateRoomAsync(id, r);
             return Ok();
         }
 
         // DELETE api/<RoomsController>/5
         [HttpDelete("{id}")]
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
             //Room r = dataContext.Rooms.Find(x => x.NumRoom == id);
             //if (r == null)
             //    return NotFound();
-            _roomService.DeleteRoom(id);
+            await _roomService.DeleteRoomAsync(id);
             return Ok();    
         }
     }

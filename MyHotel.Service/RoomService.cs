@@ -16,29 +16,29 @@ namespace MyHotel.Service
             _roomRepository = roomRepository;
         }
     
-        public Room AddRoom(Room room)
+        public async Task<Room> AddRoomAsync(Room room)
         {
-            return _roomRepository.AddRoom(room);
+            return await _roomRepository.AddRoomAsync(room);
         }
 
-        public void DeleteRoom(int id)
+        public async Task DeleteRoomAsync(int id)
         {
-            _roomRepository.DeleteRoom(id);
+            await _roomRepository.DeleteRoomAsync(id);
         }
 
-        public List<Room> GetAllRooms()
+        public async Task<List<Room>> GetAllRoomsAsync()
         {
-            return _roomRepository.GetAllRooms();
+            return await _roomRepository.GetAllRoomsAsync();
         }
 
-        public Room GetRoomById(int id)
+        public async Task<Room> GetRoomByIdAsync(int id)
         {
-            return _roomRepository.GetRoomById(id);
+            return await _roomRepository.GetRoomByIdAsync(id);
         }
 
-        public void UpdateRoom(int id, Room room)
+        public async Task UpdateRoomAsync(int id, Room room)
         {
-            _roomRepository.UpdateRoom(id, room);
+            await _roomRepository.UpdateRoomAsync(id, room);
         }
     }
 }

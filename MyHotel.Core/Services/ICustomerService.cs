@@ -8,10 +8,10 @@ namespace MyHotel.Core.Services
 {
     public interface ICustomerService
     {
-        List<Customer> GetAllCustomers();
-        Customer GetCustomerById(string id);
-        Customer AddCustomer(Customer customer);
-        void UpdateCustomer(string id, Customer customer);
-        void DeleteCustomer(string id);
+        Task<List<Customer>> GetAllCustomersAsync();
+        Task<Customer> GetCustomerByIdAsync(int id);
+        Task<Customer> AddCustomerAsync(Customer customer);
+        Task<Customer> UpdateCustomerAsync(int id, Customer customer);
+        Task DeleteCustomerAsync(int id);
     }
 }

@@ -26,25 +26,25 @@ namespace MyHotel.Api.Controllers
 
         // GET: api/<CostumerController>
         [HttpGet]
-        public ActionResult Get()
+        public async Task<ActionResult> Get()
         {
-            return Ok(_customerService.GetAllCustomers());
+            return Ok(await _customerService.GetAllCustomersAsync());
         }
 
         // GET api/<CostumerController>/5
         [HttpGet("{id}")]
-        public ActionResult<CustomerDto> Get(string id)
+        public async Task<ActionResult<CustomerDto>> Get(int id)
         {
             //Customer c = dataContext.Costumers.Find(x => x.Id == id);
             //if(c == null)
             //    return NotFound();
             //return c;
-            return Ok(_mapper.Map<CustomerDto>( _customerService.GetCustomerById(id)));
+            return Ok(_mapper.Map<CustomerDto>(await _customerService.GetCustomerByIdAsync(id)));
         }
 
         // POST api/<CostumerController>
         [HttpPost]
-        public ActionResult Post([FromBody] CustomerPostModel c)
+        public async Task<ActionResult> Post([FromBody] CustomerPostModel c)
         {
             //if (c.Tz.Length != 9)
             //    return BadRequest();
@@ -52,7 +52,7 @@ namespace MyHotel.Api.Controllers
             //if (c1 != null)
             //    return BadRequest();
             var customerToAdd = new Customer { Tz = c.Tz,Name=c.Name,Phone=c.Phone,Address=c.Address };
-            var newCustomer = _customerService.AddCustomer(customerToAdd);
+            var newCustomer = await _customerService.AddCustomerAsync(customerToAdd);
             var customerDto = _mapper.Map<CustomerDto>(newCustomer);  
             return Ok(customerDto);
         }
@@ -63,23 +63,23 @@ namespace MyHotel.Api.Controllers
 
 
         [HttpPut("{id}")]
-        public ActionResult Put(string id, [FromBody] Customer c)
+        public async Task<ActionResult> Put(int id, [FromBody] Customer c)
         {
             //Customer c1 = dataContext.Costumers.Find(x => x.Id == id);
             //if (c1 == null)
             //    return NotFound();
-            _customerService.UpdateCustomer(id, c);
+            await _customerService.UpdateCustomerAsync(id, c);
             return Ok();
         }
 
         // DELETE api/<CostumerController>/5
         [HttpDelete("{id}")]
-        public ActionResult Delete(string id)
+        public async Task<ActionResult> Delete(int id)
         {
             //Customer c = dataContext.Costumers.Find(x => x.Id == id);
             //if (c == null)
             //    return NotFound();
-            _customerService.DeleteCustomer(id);
+            await _customerService.DeleteCustomerAsync(id);
             return Ok();    
         }
     }

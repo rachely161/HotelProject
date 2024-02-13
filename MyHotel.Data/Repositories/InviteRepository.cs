@@ -15,38 +15,38 @@ namespace MyHotel.Data.Repositories
             _context = context;
         }
 
-        public Invite AddInvite(Invite invite)
+        public async Task<Invite> AddInviteAsync(Invite invite)
         {
             _context.Invites.Add(invite);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return invite;
         }
 
-        public void DeleteInvite(int id)
+        public async Task DeleteInviteAsync(int id)
         {
-            Invite i = GetInviteById(id);
+            Invite i = await GetInviteByIdAsync(id);
             _context.Invites.Remove(i);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public List<Invite> GetAllInvites()
+        public async Task<List<Invite>> GetAllInvitesAsync()
         {
-            return _context.Invites.ToList();
+            return await _context.Invites.ToListAsync();
         }
 
-        public Invite GetInviteById(int id)
+        public async Task<Invite> GetInviteByIdAsync(int id)
         {
-            return _context.Invites.Find(id);
+            return await _context.Invites.FindAsync(id);
         }
 
-        public void UpdateInvite(int id, Invite invite)
+        public async Task UpdateInviteAsync(int id, Invite invite)
         {
-            Invite i1 = GetInviteById(id);
+            Invite i1 =await GetInviteByIdAsync(id);
             //i1.RoomId = invite.RoomId;
             i1.Start = invite.Start;
             i1.NumDays = invite.NumDays;
             i1.Payment = invite.Payment;
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
     }
 }

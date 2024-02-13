@@ -11,29 +11,29 @@ namespace MyHotel.Service
             _customerRepository=customerRepository;
         }
     
-        public Customer AddCustomer(Customer customer)
+        public async Task<Customer> AddCustomerAsync(Customer customer)
         {
-            return _customerRepository.AddCustomer(customer); 
+            return await _customerRepository.AddCustomerAsync(customer); 
         }
 
-        public void DeleteCustomer(string id)
+        public async Task DeleteCustomerAsync(int id)
         {
-            _customerRepository.DeleteCustomer(id);
+            await _customerRepository.DeleteCustomerAsync(id);
         }
 
-        public List<Customer> GetAllCustomers()
+        public async Task<List<Customer>> GetAllCustomersAsync()
         {
-            return _customerRepository.GetAllCustomers();
+            return await _customerRepository.GetAllCustomersAsync();
         }
 
-        public Customer GetCustomerById(string id)
+        public async Task<Customer> GetCustomerByIdAsync(int id)
         {
-            return _customerRepository.GetCustomerById(id);
+            return await _customerRepository.GetCustomerByIdAsync(id);
         }
 
-        public void UpdateCustomer(string id, Customer customer)
+        public async Task<Customer> UpdateCustomerAsync(int id, Customer customer)
         {
-            _customerRepository.UpdateCustomer(id, customer);  
+            return await _customerRepository.UpdateCustomerAsync(id, customer);  
         }
     }
 }

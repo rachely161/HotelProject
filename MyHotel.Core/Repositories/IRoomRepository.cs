@@ -8,10 +8,10 @@ namespace MyHotel.Core.Repositories
 {
     public interface IRoomRepository
     {
-        public List<Room> GetAllRooms();
-        public Room GetRoomById(int id);     
-        public void DeleteRoom(int id);  
-        public Room AddRoom(Room room);
-        public void UpdateRoom(int id, Room room);
+        public Task<List<Room>> GetAllRoomsAsync();
+        public Task<Room> GetRoomByIdAsync(int id);     
+        public Task DeleteRoomAsync(int id);  
+        public Task<Room> AddRoomAsync(Room room);
+        public Task UpdateRoomAsync(int id, Room room);
     }
 }

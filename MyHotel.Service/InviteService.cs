@@ -15,29 +15,29 @@ namespace MyHotel.Service
         {
             _inviteRepository = inviteRepository;
         }
-        public Invite AddInvite(Invite invite)
+        public async Task<Invite> AddInviteAsync(Invite invite)
         {
-            return _inviteRepository.AddInvite(invite);
+            return await _inviteRepository.AddInviteAsync(invite);
         }
 
-        public void DeleteInvite(int id)
+        public async Task DeleteInviteAsync(int id)
         {
-            _inviteRepository.DeleteInvite(id);
+            await _inviteRepository.DeleteInviteAsync(id);
         }
 
-        public List<Invite> GetAllInvites()
+        public async Task<List<Invite>> GetAllInvitesAsync()
         {
-            return _inviteRepository.GetAllInvites();
+            return await _inviteRepository.GetAllInvitesAsync();
         }
 
-        public Invite GetInviteById(int id)
+        public async Task<Invite> GetInviteByIdAsync(int id)
         {
-            return _inviteRepository.GetInviteById(id);
+            return await _inviteRepository.GetInviteByIdAsync(id);
         }
 
-        public void UpdateInvite(int id, Invite invite)
+        public async Task UpdateInviteAsync(int id, Invite invite)
         {
-            _inviteRepository.UpdateInvite(id, invite);
+            await _inviteRepository.UpdateInviteAsync(id, invite);
         }
     }
 }

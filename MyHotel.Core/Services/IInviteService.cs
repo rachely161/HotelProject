@@ -8,10 +8,10 @@ namespace MyHotel.Core.Services
 {
     public interface IInviteService
     {
-        public List<Invite> GetAllInvites();
-        public Invite GetInviteById(int id);
-        public void DeleteInvite(int id);
-        public Invite AddInvite(Invite invite);
-        public void UpdateInvite(int id, Invite invite);
+        public Task<List<Invite>> GetAllInvitesAsync();
+        public Task<Invite> GetInviteByIdAsync(int id);
+        public Task DeleteInviteAsync(int id);
+        public Task<Invite> AddInviteAsync(Invite invite);
+        public Task UpdateInviteAsync(int id, Invite invite);
     }
 }
